@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Fifer</title>
+    <link rel="stylesheet" href="des.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fifer</h1>
+
+        <div class="criacao">
+            <input id="campo" type="text" placeholder="Tarefa...">
+            <input id="data" type="date">
+            <button onclick="adicionar()">+</button>
+        </div>
+
+        <ul id="lista"></ul>
+    </div>
+
+    <script>
+        const lista = document.getElementById("lista");
+        const campo = document.getElementById("campo");
+        const dataInput = document.getElementById("data");
+
+        let tarefas = [];
+
+        function atualizar() {
+            lista.innerHTML = "";
+
+            tarefas.forEach((t, i) => {
+                const li = document.createElement("li");
+
+                li.innerHTML = `
+                    <div class="info">
+                        <span class="texto ${t.concluida ? 'ok' : ''}">
+                            ${t.titulo}
+                        </span>
+                        ${t.data ? `<span class="data">${t.data}</span>` : ""}
+                    </div>
+
+                    <div class="acoes">
+                        <button class="btn concluir" onclick="concluir(${i})">✔</button>
+                        <button class="btn excluir" onclick="excluir(${i})">✖</button>
+                    </div>
+                `;
+
+                lista.appendChild(li);
+            });
+        }
+
+        function adicionar() {
+            const titulo = campo.value.trim();
+            const data = dataInput.value;
+
+            if (!titulo) return;
+
+            tarefas.push({ titulo, data, concluida: false });
+
+            campo.value = "";
+            dataInput.value = "";
+
+            atualizar();
+        }
+
+        function concluir(i) {
+            tarefas[i].concluida = !tarefas[i].concluida;
+            atualizar();
+        }
+
+        function excluir(i) {
+            tarefas.splice(i, 1);
+            atualizar();
+        }
+    </script>
+
+</body>
+</html>
